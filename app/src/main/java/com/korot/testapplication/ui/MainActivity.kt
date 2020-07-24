@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.korot.testapplication.R
 import com.korot.testapplication.ui.auth.AuthFragment
 import com.korot.testapplication.ui.base.BaseFragment
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity(), ConsumerFragmentProvider {
     private val currentBackStack: String = "MAIN"
 
     lateinit var progress : ProgressBar
+    lateinit var viewMain: View
     val fragmentProvider = FragmentProvider(this)
     private val model = MainViewModel(this)
 
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity(), ConsumerFragmentProvider {
         setContentView(R.layout.activity_main)
 
         progress = findViewById(R.id.view_main_progress)
-
+        viewMain = findViewById(R.id.view_main)
         model.loginObserver.observe(this, Observer {
             if (it){
                fragmentProvider.startDepartment()
@@ -67,6 +69,15 @@ class MainActivity : AppCompatActivity(), ConsumerFragmentProvider {
 
     override fun onLoadingStop() {
         progress.visibility = View.GONE
+    }
+
+    override fun onError(text: String, callback: (() -> Unit)?) {
+        val snackbar = Snackbar.make(viewMain,text, Snackbar.LENGTH_LONG)
+        callback?.let {callBack ->
+
+            snackbar.setAction("Повторить") {callBack.invoke()}
+        }
+        snackbar.show()
     }
 
 }

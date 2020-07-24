@@ -18,7 +18,7 @@ class MainViewModel(loader: LoaderInterface): BaseViewModel(loader) {
     fun load(){
         compositDisposable.add(
             authInteractor.checkLogin()
-                .compose(LoadTransformer(loader))
+                .compose(LoadTransformer(loader){load()})
                 .subscribe({
                     loginController.value = true
                 },{

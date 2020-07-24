@@ -18,7 +18,7 @@ class DepartmentViewModel(loaderInterface: LoaderInterface): BaseViewModel(loade
     fun loadEmployee(){
         compositDisposable.add(
             interactor.getAllEmployee()
-                .compose(LoadTransformer(loader))
+                .compose(LoadTransformer(loader){loadEmployee()})
                 .subscribe({
                     controller.value = it
                 },{

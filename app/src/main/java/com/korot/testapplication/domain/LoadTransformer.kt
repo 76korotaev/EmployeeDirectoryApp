@@ -8,7 +8,7 @@ import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class LoadTransformer<R>(private val loader: LoaderInterface): SingleTransformer<R, R> {
+class LoadTransformer<R>(private val loader: LoaderInterface, val errorCallback: (() -> Unit)? = null): SingleTransformer<R, R> {
 
     override fun apply(upstream: Single<R>): SingleSource<R> {
         return upstream
@@ -16,6 +16,7 @@ class LoadTransformer<R>(private val loader: LoaderInterface): SingleTransformer
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { loader.onLoadingStart()}
             .doOnTerminate { loader.onLoadingStop() }
+            .doOnError { loader.onError(it.message ?: "", errorCallback) }
     }
 }
 

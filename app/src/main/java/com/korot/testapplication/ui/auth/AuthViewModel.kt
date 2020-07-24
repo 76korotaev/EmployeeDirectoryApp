@@ -25,6 +25,7 @@ class AuthViewModel(loader: LoaderInterface): BaseViewModel(loader){
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { loader.onLoadingStart() }
                 .doOnTerminate { loader.onLoadingStop() }
+                .doOnError { loader.onError(it.message ?: ""){login(login, password)} }
                 .subscribe({
                     controller.value = true
                 },{

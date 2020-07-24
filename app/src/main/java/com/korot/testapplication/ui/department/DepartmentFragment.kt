@@ -13,7 +13,7 @@ import com.korot.testapplication.ui.base.BaseFragment
 import com.korot.testapplication.ui.base.ConsumerFragmentProvider
 import com.korot.testapplication.ui.base.LoaderInterface
 
-class DepartmentFragment(loader: ConsumerFragmentProvider): BaseFragment(loader) {
+class DepartmentFragment(fragmentProvider: ConsumerFragmentProvider): BaseFragment(fragmentProvider) {
 
     lateinit var viewList: RecyclerView
     private val model = DepartmentViewModel(loader)
