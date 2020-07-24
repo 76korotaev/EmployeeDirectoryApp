@@ -14,7 +14,7 @@ import java.lang.Exception
 class EmployeeInteractorImpl(private val apiRepository: ApiRepository, private val preferenceRepository: PersistentRepository) : EmployeeInteractor{
 
     object Holder {
-        val instance = EmployeeInteractorImpl(ApiRepositoryImpl(), PersistentRepositoryImpl.instance)
+        val instance = EmployeeInteractorImpl(ApiRepositoryImpl(), PersistentRepositoryImpl())
     }
 
     companion object {

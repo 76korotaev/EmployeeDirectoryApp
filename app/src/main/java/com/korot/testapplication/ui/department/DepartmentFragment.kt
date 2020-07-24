@@ -8,11 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.korot.testapplication.R
+import com.korot.testapplication.ui.MainActivity
+import com.korot.testapplication.ui.base.BaseFragment
+import com.korot.testapplication.ui.base.ConsumerFragmentProvider
+import com.korot.testapplication.ui.base.LoaderInterface
 
-class DepartmentFragment: Fragment() {
+class DepartmentFragment(loader: ConsumerFragmentProvider): BaseFragment(loader) {
 
     lateinit var viewList: RecyclerView
-    private val model = DepartmentViewModel()
+    private val model = DepartmentViewModel(loader)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +31,7 @@ class DepartmentFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val viewRoot = inflater.inflate(R.layout.fragment_auth,container)
+        val viewRoot = inflater.inflate(R.layout.fragment_department,container, false)
         viewList = viewRoot.findViewById(R.id.view_department_list)
         return viewRoot
     }

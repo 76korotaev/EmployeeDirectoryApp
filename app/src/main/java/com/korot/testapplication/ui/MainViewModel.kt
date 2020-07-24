@@ -6,22 +6,23 @@ import com.korot.testapplication.domain.LoadTransformer
 import com.korot.testapplication.domain.interactor.AuthInteractor
 import com.korot.testapplication.domain.interactor.AuthInteractorImpl
 import com.korot.testapplication.ui.base.BaseViewModel
+import com.korot.testapplication.ui.base.LoaderInterface
 
-class MainViewModel: BaseViewModel() {
+class MainViewModel(loader: LoaderInterface): BaseViewModel(loader) {
 
     private val loginController = MutableLiveData<Boolean>()
     val loginObserver = loginController
 
-    private val authInteractor : AuthInteractor = AuthInteractorImpl.instance
+    val authInteractor : AuthInteractor by lazy { AuthInteractorImpl.instance }
 
     fun load(){
         compositDisposable.add(
             authInteractor.checkLogin()
-                .compose(LoadTransformer())
+                .compose(LoadTransformer(loader))
                 .subscribe({
-                    loginController.value = it
+                    loginController.value = true
                 },{
-                    onError(it)
+                    loginController.value = false
                 })
         )
     }

@@ -12,7 +12,7 @@ import java.lang.Exception
 class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository: ApiRepository) : AuthInteractor {
 
     private object Holder {
-        val instance = AuthInteractorImpl(PersistentRepositoryImpl.instance, ApiRepositoryImpl())
+        val instance = AuthInteractorImpl(PersistentRepositoryImpl(), ApiRepositoryImpl())
     }
 
     companion object{

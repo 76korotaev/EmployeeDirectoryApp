@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <fragment
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:id="@+id/view_fragment"/>
     <ProgressBar
         android:layout_width="wrap_content"

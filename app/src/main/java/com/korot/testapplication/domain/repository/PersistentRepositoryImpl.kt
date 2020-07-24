@@ -7,23 +7,22 @@ import com.korot.testapplication.TestApplication
 import com.korot.testapplication.domain.model.Auth
 import kotlin.math.log
 
-class PersistentRepositoryImpl(val context: Context) : PersistentRepository{
+class PersistentRepositoryImpl() : PersistentRepository{
 
     private val LOGIN = "LOGIN"
     private val PASSWORD = "PASSWORD"
 
-    companion object{
-
-        val instance : PersistentRepository by lazy {Holder.INSTANCE}
-    }
-
-    private object Holder {
-        val INSTANCE = PersistentRepositoryImpl(context = TestApplication.application)
-    }
-
+//    companion object{
+//        val instance : PersistentRepository by lazy {Holder.INSTANCE}
+//    }
+//
+//    private object Holder {
+//        val INSTANCE = PersistentRepositoryImpl()
+//    }
 
 
-    private val preferences = context.getSharedPreferences("TestApplicationPreference", Context.MODE_PRIVATE)
+
+    private val preferences = TestApplication.application.getSharedPreferences("TestApplicationPreference", Context.MODE_PRIVATE)
 
     override fun getAuth(): Auth? {
         val login = preferences.getString(LOGIN, null)
