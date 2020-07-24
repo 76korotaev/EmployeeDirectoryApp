@@ -3,7 +3,7 @@ package com.korot.testapplication.network.apimodel
 import com.google.gson.annotations.SerializedName
 
 
-data class LogiResponse (
+data class LoginResponse (
     @SerializedName("Message")
     val message: String,
 

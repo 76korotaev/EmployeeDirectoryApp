@@ -22,7 +22,9 @@ class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository
     override fun logIn(login: String, password: String) : Completable {
         val auth = Auth(login, password)
         return apiRepository.checkLogin(auth)
-            .doOnComplete { repository.saveAuth(auth) }
+            .doOnComplete {
+                repository.saveAuth(auth)
+            }
     }
 
     override fun logOut(): Completable {

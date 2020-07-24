@@ -1,5 +1,6 @@
 package com.korot.testapplication.network
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit
 object ApiClient {
 
     private val timeOut = 10000L
-    private val baseUrl = "https://contact.taxsee.com/Contacts.svc"
+    private val baseUrl = "https://contact.taxsee.com/Contacts.svc/"
 
     fun getClient(): Api {
         val builder = OkHttpClient.Builder()
@@ -23,12 +24,15 @@ object ApiClient {
 
         builder.addInterceptor(loggingInterceptor)
 
+        val gson = GsonBuilder()
+            .create()
+
 
         val httpClient = builder.build()
 
         val retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            //.addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(baseUrl)
             .client(httpClient)
             .build()

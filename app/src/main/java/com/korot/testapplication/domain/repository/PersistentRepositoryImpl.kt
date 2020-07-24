@@ -12,14 +12,16 @@ class PersistentRepositoryImpl(val context: Context) : PersistentRepository{
     private val LOGIN = "LOGIN"
     private val PASSWORD = "PASSWORD"
 
-    private object Holder {
-        val instance = PersistentRepositoryImpl(context = TestApplication.application)
-    }
-
     companion object{
 
-        val instance : PersistentRepositoryImpl by lazy {Holder.instance}
+        val instance : PersistentRepository by lazy {Holder.INSTANCE}
     }
+
+    private object Holder {
+        val INSTANCE = PersistentRepositoryImpl(context = TestApplication.application)
+    }
+
+
 
     private val preferences = context.getSharedPreferences("TestApplicationPreference", Context.MODE_PRIVATE)
 
