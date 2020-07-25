@@ -28,6 +28,9 @@ class DepartmentFragment(fragmentProvider: ConsumerFragmentProvider): BaseFragme
                 LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
             viewList.adapter = adapter
             adapter.setItems(listOf(DepartmentItem(department = it)))
+            adapter.setEmployeeClickListener {
+                //todo открываем карточку сотрудника
+            }
         })
         model.loadEmployee()
     }
