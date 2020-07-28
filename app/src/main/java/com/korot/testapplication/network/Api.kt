@@ -21,4 +21,11 @@ interface Api {
         @Query("password") password: String
     ):Single<OrganizationResponse>
 
+    @GET("GetWPhoto")
+    fun getPhoto(
+        @Query("login") login: String,
+        @Query("password") password: String,
+        @Query("id") id: String
+    ):Single<Any>
+
 }

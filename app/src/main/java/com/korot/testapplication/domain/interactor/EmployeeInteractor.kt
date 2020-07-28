@@ -8,6 +8,6 @@ interface EmployeeInteractor {
 
     fun getAllEmployee() : Single<Department>
 
-    fun getEmployeeForId(id: Int) : Single<Employee>
+    fun getPhotoUrl(id: Int): Single<String>
 
 }

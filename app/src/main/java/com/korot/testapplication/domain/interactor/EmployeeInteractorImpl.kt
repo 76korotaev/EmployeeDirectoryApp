@@ -36,8 +36,10 @@ class EmployeeInteractorImpl(private val apiRepository: ApiRepository, private v
         }
     }
 
-    override fun getEmployeeForId(id: Int): Single<Employee> {
-        TODO("Not yet implemented")
+    //todo временно URL с Бредом Питом, так как тестовый url не работает
+    override fun getPhotoUrl(id: Int): Single<String> {
+        return Single.just("https://tv.ua/i/11/71/59/3/1171593/image_main/6d8b90737eb7f5f585e93de2c8ecb91b-quality_70Xresize_crop_1Xallow_enlarge_0Xw_750Xh_463.jpg")
     }
+
 
 }

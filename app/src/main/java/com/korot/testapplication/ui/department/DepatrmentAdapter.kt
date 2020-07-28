@@ -22,6 +22,10 @@ class DepatrmentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         employeeClickListener = listener
     }
 
+    fun getItems(): List<DepartmentItem>{
+        return items
+    }
+
     enum class DepartmentItemType(val id:Int,@LayoutRes val layoutId: Int){
         DEPARTMENT(layoutId = R.layout.list_departmenr, id = 0),
         EMPLOYEE(layoutId = R.layout.list_employee, id = 1);
@@ -177,7 +181,9 @@ class DepatrmentAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             viewName.setText(employee?.name)
             viewId.setText(employee?.id.toString())
             itemView.setOnClickListener {
-                employee?.let { employeeClickListener?.invoke(it) }
+                employee?.let {
+                    employeeClickListener?.invoke(it)
+                }
             }
         }
 

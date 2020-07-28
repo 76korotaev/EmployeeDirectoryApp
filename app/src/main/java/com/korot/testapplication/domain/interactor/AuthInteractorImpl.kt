@@ -52,4 +52,15 @@ class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository
         }
     }
 
+    override fun getCurrentLogin(): Single<String> {
+        return Single.create{emitter ->
+            val login = repository.getAuth()?.login
+            if (login != null){
+                emitter.onSuccess(login)
+            } else {
+                emitter.onError(Exception("Login is empty"))
+            }
+        }
+    }
+
 }

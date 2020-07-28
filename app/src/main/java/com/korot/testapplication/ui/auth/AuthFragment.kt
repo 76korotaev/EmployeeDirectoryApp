@@ -5,17 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.korot.testapplication.R
-import com.korot.testapplication.ui.MainActivity
 import com.korot.testapplication.ui.base.BaseFragment
-import com.korot.testapplication.ui.base.ConsumerFragmentProvider
-import com.korot.testapplication.ui.base.LoaderInterface
-import com.korot.testapplication.ui.department.DepartmentFragment
+import com.korot.testapplication.ui.base.BaseActivity
 
-class AuthFragment(loader: ConsumerFragmentProvider): BaseFragment(loader) {
+class AuthFragment(loader: BaseActivity): BaseFragment(loader) {
 
     lateinit var viewLogin: TextInputEditText
     lateinit var viewPassword : TextInputEditText

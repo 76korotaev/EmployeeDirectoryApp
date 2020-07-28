@@ -1,12 +1,12 @@
 package com.korot.testapplication.ui
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.korot.testapplication.domain.LoadTransformer
 import com.korot.testapplication.domain.interactor.AuthInteractor
 import com.korot.testapplication.domain.interactor.AuthInteractorImpl
 import com.korot.testapplication.ui.base.BaseViewModel
 import com.korot.testapplication.ui.base.LoaderInterface
+import io.reactivex.Completable
 
 class MainViewModel(loader: LoaderInterface): BaseViewModel(loader) {
 
@@ -22,6 +22,18 @@ class MainViewModel(loader: LoaderInterface): BaseViewModel(loader) {
                 .subscribe({
                     loginController.value = true
                 },{
+                    loginController.value = false
+                })
+        )
+    }
+
+    fun logout(){
+        compositDisposable.add(
+            authInteractor.logOut()
+                .compose(LoadTransformer<Completable>(loader){
+                    load()
+                })
+                .subscribe({
                     loginController.value = false
                 })
         )

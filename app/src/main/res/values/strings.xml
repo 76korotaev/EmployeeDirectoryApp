@@ -3,4 +3,6 @@
     <string name="view_login">Логин</string>
     <string name="view_password">Пароль</string>
     <string name="view_input">Войти</string>
+    <string name="view_phone_label">Телефон:</string>
+    <string name="email_label">Email</string>
 </resources>

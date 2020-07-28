@@ -1,21 +1,17 @@
 package com.korot.testapplication.ui
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.korot.testapplication.R
-import com.korot.testapplication.ui.auth.AuthFragment
-import com.korot.testapplication.ui.base.BaseFragment
-import com.korot.testapplication.ui.base.ConsumerFragmentProvider
-import com.korot.testapplication.ui.base.FragmentProvider
-import com.korot.testapplication.ui.base.LoaderInterface
-import com.korot.testapplication.ui.department.DepartmentFragment
+import com.korot.testapplication.ui.base.*
+import com.korot.testapplication.ui.base.utils.PermissionManager
 
-class MainActivity : AppCompatActivity(), ConsumerFragmentProvider {
+class MainActivity : AppCompatActivity(), BaseActivity {
 
     private val currentBackStack: String = "MAIN"
 
@@ -74,10 +70,17 @@ class MainActivity : AppCompatActivity(), ConsumerFragmentProvider {
     override fun onError(text: String, callback: (() -> Unit)?) {
         val snackbar = Snackbar.make(viewMain,text, Snackbar.LENGTH_LONG)
         callback?.let {callBack ->
-
             snackbar.setAction("Повторить") {callBack.invoke()}
         }
         snackbar.show()
+    }
+
+    override fun back() {
+        onBackPressed()
+    }
+
+    override fun logout() {
+        model.logout()
     }
 
 }

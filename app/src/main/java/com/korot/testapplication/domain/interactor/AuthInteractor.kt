@@ -11,4 +11,6 @@ interface AuthInteractor {
 
     fun checkLogin(): Single<Boolean>
 
+    fun getCurrentLogin(): Single<String>
+
 }
