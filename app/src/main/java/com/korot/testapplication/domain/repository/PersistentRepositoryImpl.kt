@@ -12,16 +12,6 @@ class PersistentRepositoryImpl() : PersistentRepository{
     private val LOGIN = "LOGIN"
     private val PASSWORD = "PASSWORD"
 
-//    companion object{
-//        val instance : PersistentRepository by lazy {Holder.INSTANCE}
-//    }
-//
-//    private object Holder {
-//        val INSTANCE = PersistentRepositoryImpl()
-//    }
-
-
-
     private val preferences = TestApplication.application.getSharedPreferences("TestApplicationPreference", Context.MODE_PRIVATE)
 
     override fun getAuth(): Auth? {

@@ -33,9 +33,9 @@ class MainViewModel(loader: LoaderInterface): BaseViewModel(loader) {
                 .compose(LoadTransformer<Completable>(loader){
                     load()
                 })
-                .subscribe({
+                .subscribe {
                     loginController.value = false
-                })
+                }
         )
     }
 

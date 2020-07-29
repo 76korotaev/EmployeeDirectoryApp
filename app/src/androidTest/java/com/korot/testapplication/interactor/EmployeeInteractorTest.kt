@@ -41,7 +41,7 @@ class EmployeeInteractorTest {
             }
 
         }
-        interactor = EmployeeInteractorImpl(apiRepository, persistentRepository)
+        interactor = EmployeeInteractorImpl(apiRepository)
 
         persistentRepository.saveAuth(Auth(correctLogin, correctPassword))
 

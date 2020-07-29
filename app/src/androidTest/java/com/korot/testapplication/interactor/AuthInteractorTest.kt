@@ -7,6 +7,9 @@ import com.korot.testapplication.domain.repository.ApiRepository
 import com.korot.testapplication.domain.repository.ApiRepositoryImpl
 import com.korot.testapplication.domain.repository.PersistentRepository
 import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
+import com.korot.testapplication.network.apimodel.OrganizationResponse
+import io.reactivex.Completable
+import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -18,6 +21,7 @@ class AuthInteractorTest {
     private val correctPassword = "test_pass"
     private val incorrectLogin = "123"
     private val incorrectPassword = "123"
+    private val exception = Exception("Не верный логин или пароль")
 
     private lateinit var interactor : AuthInteractor
     private lateinit var apiRepository : ApiRepository
@@ -40,6 +44,26 @@ class AuthInteractorTest {
 
             override fun clearAuth() {
                 auth = null
+            }
+
+        }
+        apiRepository = object : ApiRepository{
+            override fun checkLogin(): Completable {
+                return Completable.create {
+                    emitter ->
+                        val auth = persistentRepository.getAuth()
+                        val login = auth?.login ?: ""
+                        val pass = auth?.password ?: ""
+                        if (login == correctLogin && pass == correctPassword){
+                            emitter.onComplete()
+                        } else {
+                            emitter.onError(exception)
+                        }
+                }
+            }
+
+            override fun getOrganization(): Single<OrganizationResponse> {
+                return Single.just(OrganizationResponse())
             }
 
         }

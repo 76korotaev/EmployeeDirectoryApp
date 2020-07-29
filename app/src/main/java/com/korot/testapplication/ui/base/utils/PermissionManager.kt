@@ -14,7 +14,6 @@ class PermissionManager(val fragment: Fragment){
 
     companion object {
         val RequestCodeCall = 101
-        val RequestCodeEmail = 102
     }
 
     fun callPermission(callbacks: () -> Unit){
@@ -27,15 +26,5 @@ class PermissionManager(val fragment: Fragment){
             }
         }
     }
-
-    fun emailPermission(callbacks: () -> Unit){
-
-    }
-
-    private fun isCallPermission(){
-
-    }
-
-    private fun isEmailPermission(){}
 
 }
