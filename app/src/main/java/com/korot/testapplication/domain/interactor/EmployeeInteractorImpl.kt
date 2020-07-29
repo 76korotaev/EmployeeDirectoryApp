@@ -11,10 +11,10 @@ import com.korot.testapplication.network.apimodel.OrganizationMapper
 import io.reactivex.Single
 import java.lang.Exception
 
-class EmployeeInteractorImpl(private val apiRepository: ApiRepository, private val preferenceRepository: PersistentRepository) : EmployeeInteractor{
+class EmployeeInteractorImpl(private val apiRepository: ApiRepository) : EmployeeInteractor{
 
     object Holder {
-        val instance = EmployeeInteractorImpl(ApiRepositoryImpl(), PersistentRepositoryImpl())
+        val instance = EmployeeInteractorImpl(ApiRepositoryImpl())
     }
 
     companion object {
@@ -22,16 +22,8 @@ class EmployeeInteractorImpl(private val apiRepository: ApiRepository, private v
     }
 
     override fun getAllEmployee(): Single<Department> {
-        return Single.create<Auth> {
-            val auth = preferenceRepository.getAuth()
-            if (auth == null){
-                it.onError(Exception("Ошибка авторизации"))
-            } else {
-                it.onSuccess(auth)
-            }
-        }.flatMap {
-            apiRepository.getOrganization(it)
-        }.map {
+        return apiRepository.getOrganization()
+                .map {
             OrganizationMapper.departmentMap(it)
         }
     }

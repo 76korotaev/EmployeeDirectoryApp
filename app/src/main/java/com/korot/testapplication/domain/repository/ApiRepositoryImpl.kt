@@ -12,16 +12,16 @@ class ApiRepositoryImpl : ApiRepository{
 
     val client = ApiClient.getClient()
 
-    override fun checkLogin(auth: Auth): Completable {
-        return client.login(auth.login, auth.password)
+    override fun checkLogin(): Completable {
+        return client.login()
             .flatMapCompletable {
                 if (it.isSuccess) Completable.complete()
                 else Completable.error(Exception(it.message))
             }
     }
 
-    override fun getOrganization(auth: Auth): Single<OrganizationResponse> {
-        return client.getAll(auth.login, auth.password)
+    override fun getOrganization(): Single<OrganizationResponse> {
+        return client.getAll()
     }
 
 }

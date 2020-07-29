@@ -21,10 +21,8 @@ class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository
 
     override fun logIn(login: String, password: String) : Completable {
         val auth = Auth(login, password)
-        return apiRepository.checkLogin(auth)
-            .doOnComplete {
-                repository.saveAuth(auth)
-            }
+        repository.saveAuth(auth)
+        return apiRepository.checkLogin()
     }
 
     override fun logOut(): Completable {
@@ -36,9 +34,7 @@ class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository
 
     override fun checkLogin(): Single<Boolean> {
         return Single.create<Boolean> { emitter ->
-            val auth : Auth? = repository.getAuth()
-            if (auth != null){
-                apiRepository.checkLogin(auth = auth)
+                apiRepository.checkLogin()
                     .subscribe (
                         {
                             emitter.onSuccess(true)
@@ -46,9 +42,6 @@ class AuthInteractorImpl(val repository: PersistentRepository, val apiRepository
                             emitter.onError(it)
                         }
                     )
-            } else {
-                emitter.onError(Exception("LOGIN is empty"))
-            }
         }
     }
 

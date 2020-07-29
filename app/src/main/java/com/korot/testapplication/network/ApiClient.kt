@@ -1,6 +1,8 @@
 package com.korot.testapplication.network
 
+import android.content.Context
 import com.google.gson.GsonBuilder
+import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,7 +24,10 @@ object ApiClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
+
+
         builder.addInterceptor(loggingInterceptor)
+        builder.addInterceptor(getAuthInterceptor())
 
         val gson = GsonBuilder()
             .create()
@@ -38,6 +43,11 @@ object ApiClient {
             .build()
         return retrofit.create<Api>(Api::class.java)
 
+    }
+
+    private fun getAuthInterceptor():AuthInterceptor{
+        val repo = PersistentRepositoryImpl()
+        return AuthInterceptor(repo)
     }
 
 

@@ -8,7 +8,7 @@ import io.reactivex.Single
 
 interface ApiRepository {
 
-    fun checkLogin(auth: Auth) : Completable
+    fun checkLogin() : Completable
 
-    fun getOrganization(auth: Auth): Single<OrganizationResponse>
+    fun getOrganization(): Single<OrganizationResponse>
 }

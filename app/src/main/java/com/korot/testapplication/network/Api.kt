@@ -9,23 +9,13 @@ import retrofit2.http.Query
 interface Api {
 
     @GET("Hello")
-    fun login(
-        @Query("login") login: String,
-        @Query("password") password: String
-    ):Single<LoginResponse>
+    fun login():Single<LoginResponse>
 
 
     @GET("GetAll")
-    fun getAll(
-        @Query("login") login: String,
-        @Query("password") password: String
-    ):Single<OrganizationResponse>
+    fun getAll():Single<OrganizationResponse>
 
     @GET("GetWPhoto")
-    fun getPhoto(
-        @Query("login") login: String,
-        @Query("password") password: String,
-        @Query("id") id: String
-    ):Single<Any>
+    fun getPhoto():Single<Any>
 
 }
