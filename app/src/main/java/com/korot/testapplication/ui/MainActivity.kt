@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), BaseActivity {
                 fragmentProvider.startAuth()
             }
         })
+
         start()
     }
 

@@ -1,7 +1,9 @@
 package com.korot.testapplication.network
 
 import android.content.Context
+import androidx.core.app.CoreComponentFactory
 import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,7 +38,7 @@ object ApiClient {
         val httpClient = builder.build()
 
         val retrofit = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(baseUrl)
             .client(httpClient)

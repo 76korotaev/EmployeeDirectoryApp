@@ -4,29 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.Exception
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel(val loader: LoaderInterface): ViewModel() {
 
+    private val parentJob = Job()
+
+    private val coroutineContext: CoroutineContext
+        get() = parentJob + Dispatchers.Default
+
+    protected val scope = CoroutineScope(coroutineContext)
+
+
+
     val compositDisposable: CompositeDisposable = CompositeDisposable()
 
-    protected val errorController  = MutableLiveData<String>()
-    val errorObserver : LiveData<String> = errorController
-
-    protected val loadingController = MutableLiveData<Boolean>()
-    val loadingObserver : LiveData<Boolean> = loadingController
-
-    override fun onCleared() {
-        compositDisposable.dispose()
-        super.onCleared()
-    }
-
-    fun onError(exception: Throwable){
-        errorController.value = exception.message
-    }
-
-    fun loading(isLoading: Boolean){
-        loadingController.value = isLoading
-    }
 
 }

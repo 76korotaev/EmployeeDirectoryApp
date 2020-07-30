@@ -1,16 +1,17 @@
 package com.korot.testapplication.domain.interactor
 
+import com.korot.testapplication.domain.repository.ApiCall
 import io.reactivex.Completable
 import io.reactivex.Single
 
 interface AuthInteractor {
 
-    fun logIn(login: String, password: String): Completable
+    suspend fun logIn(login: String, password: String): ApiCall<Boolean>
 
-    fun logOut(): Completable
+    suspend fun logOut(): ApiCall<Boolean>
 
-    fun checkLogin(): Single<Boolean>
+    suspend fun checkLogin(): ApiCall<Boolean>
 
-    fun getCurrentLogin(): Single<String>
+    suspend fun getCurrentLogin(): ApiCall<String>
 
 }

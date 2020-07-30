@@ -10,6 +10,10 @@ import com.korot.testapplication.ui.base.LoaderInterface
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AuthViewModel(loader: LoaderInterface): BaseViewModel(loader){
 
@@ -19,18 +23,20 @@ class AuthViewModel(loader: LoaderInterface): BaseViewModel(loader){
     val interactor = AuthInteractorImpl.instance
 
     fun login(login: String, password: String) {
-        compositDisposable.add(
-            interactor.logIn(login, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { loader.onLoadingStart() }
-                .doOnTerminate { loader.onLoadingStop() }
-                .doOnError { loader.onError(it.message ?: ""){login(login, password)} }
-                .subscribe({
-                    controller.value = true
-                },{
-                    onError(it)
-                })
-        )
+        loader.onLoadingStart()
+        GlobalScope.launch {
+            val res = interactor.logIn(login, password)
+            when{
+                res.body != null -> controller.postValue(res.body)
+                res.error != null ->
+                    withContext(Dispatchers.Main) {
+                        loader.onError(res.error){login(login, password)}
+                    }
+
+            }
+            withContext(Dispatchers.Main) {
+                loader.onLoadingStop()
+            }
+        }
     }
 }

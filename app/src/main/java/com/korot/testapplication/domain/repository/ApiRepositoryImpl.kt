@@ -12,16 +12,25 @@ class ApiRepositoryImpl : ApiRepository{
 
     val client = ApiClient.getClient()
 
-    override fun checkLogin(): Completable {
-        return client.login()
-            .flatMapCompletable {
-                if (it.isSuccess) Completable.complete()
-                else Completable.error(Exception(it.message))
+    override suspend fun checkLogin(): ApiCall<Boolean> {
+        val response = client.login().await()
+        response.body()?.let {
+            if (it.isSuccess){
+                return ApiCall(true)
+            } else {
+                return ApiCall(error = it.message)
             }
+        }
+        return ApiCall(error = "Ошибка получения данных" )
     }
 
-    override fun getOrganization(): Single<OrganizationResponse> {
-        return client.getAll()
+    override suspend fun getOrganization(): ApiCall<OrganizationResponse> {
+        val response = client.getAll().await()
+        if (response.isSuccessful){
+            return ApiCall(response.body())
+        } else {
+            return ApiCall(error =  "Ошибка получения данных")
+        }
     }
 
 }

@@ -8,6 +8,10 @@ import com.korot.testapplication.domain.interactor.EmployeeInteractorImpl
 import com.korot.testapplication.domain.model.Department
 import com.korot.testapplication.ui.base.BaseViewModel
 import com.korot.testapplication.ui.base.LoaderInterface
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DepartmentViewModel(loaderInterface: LoaderInterface) : BaseViewModel(loaderInterface) {
 
@@ -21,27 +25,42 @@ class DepartmentViewModel(loaderInterface: LoaderInterface) : BaseViewModel(load
     private val authInteractor = AuthInteractorImpl.instance
 
     fun loadEmployee() {
-        compositDisposable.add(
-            interactor.getAllEmployee()
-                .compose(LoadTransformer(loader) { loadEmployee() })
-                .subscribe({
-                    controller.value = it
-                }, {
-                    onError(it)
-                })
-        )
+        loader.onLoadingStart()
+        scope.launch {
+            val res = interactor.getAllEmployee()
+            when{
+                res.body != null -> controller.postValue(res.body)
+                res.error != null ->
+                    withContext(Dispatchers.Main) {
+                        loader.onError(res.error){loadEmployee()}
+                    }
+
+            }
+            withContext(Dispatchers.Main) {
+                loader.onLoadingStop()
+            }
+        }
     }
 
     fun getLogin() {
-        compositDisposable.add(
-            authInteractor.getCurrentLogin()
-                .compose(LoadTransformer(loader))
-                .subscribe({
-                    loginController.value = it
-                }, {
-                    onError(it)
-                })
-        )
+
+        loader.onLoadingStart()
+
+        scope.launch {
+            val res = authInteractor.getCurrentLogin()
+            when{
+                res.body != null -> loginController.postValue(res.body)
+                res.error != null ->
+                    withContext(Dispatchers.Main) {
+                        loader.onError(res.error){getLogin()}
+                    }
+
+            }
+            withContext(Dispatchers.Main) {
+                loader.onLoadingStop()
+            }
+        }
+
     }
 
 }

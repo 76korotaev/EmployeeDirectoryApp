@@ -8,6 +8,8 @@ import com.korot.testapplication.domain.model.Employee
 import com.korot.testapplication.domain.repository.ApiRepository
 import com.korot.testapplication.domain.repository.ApiRepositoryImpl
 import com.korot.testapplication.domain.repository.PersistentRepository
+import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -24,23 +26,7 @@ class EmployeeInteractorTest {
     @Before
     fun setUp() {
         apiRepository = ApiRepositoryImpl()
-        persistentRepository = object : PersistentRepository {
-
-            private var auth: Auth? = null
-
-            override fun getAuth(): Auth? {
-                return auth
-            }
-
-            override fun saveAuth(auth: Auth) {
-                this.auth = auth
-            }
-
-            override fun clearAuth() {
-                auth = null
-            }
-
-        }
+        persistentRepository = PersistentRepositoryImpl()
         interactor = EmployeeInteractorImpl(apiRepository)
 
         persistentRepository.saveAuth(Auth(correctLogin, correctPassword))
@@ -49,17 +35,24 @@ class EmployeeInteractorTest {
 
     @Test
     fun getAll() {
-        val dep = interactor.getAllEmployee().blockingGet()
-        Assert.assertNotNull(dep.department)
-        Assert.assertEquals(dep.employees.size, 0)
-        Assert.assertNotEquals(dep.department?.size, 0)
+        runBlocking {
+            val dep = interactor.getAllEmployee()
+            Assert.assertNotNull(dep.body?.department)
+            Assert.assertEquals(dep.body?.employees?.size, 0)
+            Assert.assertNotEquals(dep.body?.department?.size, 0)
+        }
+
     }
 
     @Test
     fun getAllEmpoyee() {
-        val dep = interactor.getAllEmployee().blockingGet()
-        val all = getChildEmployee(dep)
-        Assert.assertNotEquals(all.size, 0)
+        runBlocking {
+            val dep = interactor.getAllEmployee()
+            Assert.assertNotNull(dep.body)
+            val all = getChildEmployee(dep.body!!)
+            Assert.assertNotEquals(all.size, 0)
+        }
+
     }
 
     private fun getChildEmployee(department: Department): List<Employee> {

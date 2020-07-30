@@ -1,15 +1,16 @@
 package com.korot.testapplication.interactor
 
+import android.util.Log
 import com.korot.testapplication.domain.interactor.AuthInteractor
 import com.korot.testapplication.domain.interactor.AuthInteractorImpl
 import com.korot.testapplication.domain.model.Auth
-import com.korot.testapplication.domain.repository.ApiRepository
-import com.korot.testapplication.domain.repository.ApiRepositoryImpl
-import com.korot.testapplication.domain.repository.PersistentRepository
-import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
+import com.korot.testapplication.domain.repository.*
 import com.korot.testapplication.network.apimodel.OrganizationResponse
 import io.reactivex.Completable
 import io.reactivex.Single
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -21,7 +22,7 @@ class AuthInteractorTest {
     private val correctPassword = "test_pass"
     private val incorrectLogin = "123"
     private val incorrectPassword = "123"
-    private val exception = Exception("Не верный логин или пароль")
+    private val exception = "Не верный логин или пароль"
 
     private lateinit var interactor : AuthInteractor
     private lateinit var apiRepository : ApiRepository
@@ -48,22 +49,23 @@ class AuthInteractorTest {
 
         }
         apiRepository = object : ApiRepository{
-            override fun checkLogin(): Completable {
-                return Completable.create {
-                    emitter ->
-                        val auth = persistentRepository.getAuth()
-                        val login = auth?.login ?: ""
-                        val pass = auth?.password ?: ""
-                        if (login == correctLogin && pass == correctPassword){
-                            emitter.onComplete()
-                        } else {
-                            emitter.onError(exception)
-                        }
-                }
+            override suspend fun checkLogin(): ApiCall<Boolean> {
+                return GlobalScope.async {
+                    val auth = persistentRepository.getAuth()
+                    val login = auth?.login ?: ""
+                    val pass = auth?.password ?: ""
+                    if (login == correctLogin && pass == correctPassword){
+                        ApiCall(true)
+                    } else {
+                        ApiCall(error = exception)
+                    }
+                }.await()
             }
 
-            override fun getOrganization(): Single<OrganizationResponse> {
-                return Single.just(OrganizationResponse())
+            override suspend fun getOrganization(): ApiCall<OrganizationResponse> {
+                return GlobalScope.async {
+                    ApiCall(OrganizationResponse())
+                }.await()
             }
 
         }
@@ -73,19 +75,14 @@ class AuthInteractorTest {
 
     @Test
     fun loginTest(){
-        try {
-            val isCurrentlogin = interactor.checkLogin().blockingGet()
-            Assert.assertEquals(isCurrentlogin, false)
-        } catch (e: Exception){
-            assert(true)
+        runBlocking {
+            val isCurrentlogin = interactor.checkLogin()
+            Assert.assertNull(isCurrentlogin.body)
+            Assert.assertNotNull(isCurrentlogin.error)
+            val correctLogin = interactor.logIn(correctLogin, correctPassword)
+            Assert.assertEquals(correctLogin.body, true)
+            val correct = interactor.checkLogin()
+            Assert.assertEquals(correct.body, true)
         }
-
-        interactor.logIn(incorrectLogin, incorrectPassword).blockingGet()
-
-        interactor.logIn(correctLogin, correctPassword).blockingGet()
-
-        val correct = interactor.checkLogin().blockingGet()
-        Assert.assertEquals(correct, true)
-
     }
 }

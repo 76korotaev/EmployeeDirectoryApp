@@ -5,10 +5,13 @@ import com.korot.testapplication.network.apimodel.EmployeeResponse
 import com.korot.testapplication.network.apimodel.OrganizationResponse
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.lang.Exception
 
 interface ApiRepository {
 
-    fun checkLogin() : Completable
+    suspend fun checkLogin() : ApiCall<Boolean>
 
-    fun getOrganization(): Single<OrganizationResponse>
+    suspend fun getOrganization(): ApiCall<OrganizationResponse>
 }
+
+class ApiCall<I>(val body: I? = null,val error: String? = null)
