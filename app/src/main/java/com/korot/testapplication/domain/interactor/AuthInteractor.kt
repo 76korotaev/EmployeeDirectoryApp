@@ -1,8 +1,6 @@
 package com.korot.testapplication.domain.interactor
 
 import com.korot.testapplication.domain.repository.ApiCall
-import io.reactivex.Completable
-import io.reactivex.Single
 
 interface AuthInteractor {
 

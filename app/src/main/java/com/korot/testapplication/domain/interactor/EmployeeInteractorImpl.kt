@@ -1,16 +1,14 @@
 package com.korot.testapplication.domain.interactor
 
-import com.korot.testapplication.domain.model.Auth
 import com.korot.testapplication.domain.model.Department
-import com.korot.testapplication.domain.model.Employee
-import com.korot.testapplication.domain.repository.*
+import com.korot.testapplication.domain.repository.ApiCall
+import com.korot.testapplication.domain.repository.ApiRepository
+import com.korot.testapplication.domain.repository.ApiRepositoryImpl
 import com.korot.testapplication.network.apimodel.OrganizationMapper
-import io.reactivex.Single
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import java.lang.Exception
 
-class EmployeeInteractorImpl(private val apiRepository: ApiRepository) : EmployeeInteractor{
+class EmployeeInteractorImpl(private val apiRepository: ApiRepository) : EmployeeInteractor {
 
     object Holder {
         val instance = EmployeeInteractorImpl(ApiRepositoryImpl())
@@ -24,7 +22,7 @@ class EmployeeInteractorImpl(private val apiRepository: ApiRepository) : Employe
         return GlobalScope.async {
             val depApi = apiRepository.getOrganization()
             val body = depApi.body
-            if (body != null){
+            if (body != null) {
                 ApiCall(OrganizationMapper.departmentMap(body))
             } else {
                 ApiCall(error = depApi.error)

@@ -1,14 +1,11 @@
 package com.korot.testapplication.network
 
-import android.content.Context
-import androidx.core.app.CoreComponentFactory
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.korot.testapplication.domain.repository.PersistentRepositoryImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -47,7 +44,7 @@ object ApiClient {
 
     }
 
-    private fun getAuthInterceptor():AuthInterceptor{
+    private fun getAuthInterceptor(): AuthInterceptor {
         val repo = PersistentRepositoryImpl()
         return AuthInterceptor(repo)
     }

@@ -2,12 +2,10 @@ package com.korot.testapplication.ui.employee
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.korot.testapplication.domain.LoadTransformer
 import com.korot.testapplication.domain.interactor.EmployeeInteractorImpl
 import com.korot.testapplication.ui.base.BaseViewModel
 import com.korot.testapplication.ui.base.LoaderInterface
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
